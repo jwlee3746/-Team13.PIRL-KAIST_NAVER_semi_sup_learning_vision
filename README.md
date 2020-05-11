@@ -17,9 +17,22 @@ nsml run -d fashion_eval -e main.py
 
 ## References
 ```
-@article{berthelot2019mixmatch,
-  title={MixMatch: A Holistic Approach to Semi-Supervised Learning},
-  author={Berthelot, David and Carlini, Nicholas and Goodfellow, Ian and Papernot, Nicolas and Oliver, Avital and Raffel, Colin},
-  journal={arXiv preprint arXiv:1905.02249},
-  year={2019}
-}
+[1] David Berthelot, Nicholas Carlini, Ian Goodfellow,
+Nicolas Papernot, Avital Oliver, and Colin A Raffel.
+Mixmatch: A holistic approach to semi-supervised
+learning. In Advances in Neural Information Processing
+Systems 32. 2019. 1, 2, 3, 5, 6, 7
+[2] Kihyuk Sohn, David Berthelot, Chun-Liang Li, Zizhao
+Zhang, Nicholas Carlini, Ekin D. Cubuk, Alex Kurakin,
+Han Zhang, Colin Raffel. FixMatch: Simplifying
+Semi-Supervised Learning with Consistency and
+Confidence.
+[3] Dong-Hyun Lee. Pseudo-label: The simple and efficient
+semi-supervised learning method for deep neural
+networks. In ICML Workshop on Challenges in
+Representation Learning, 2013. 1, 3, 4, 5, 6
+[4] Ekin D. Cubuk, Barret Zoph, Jonathon Shlens, and Quoc
+V. Le. Randaugment: Practical automated data
+augmentation with a reduced search space. arXiv preprint
+arXiv:1909.13719, 2019. 1, 3, 6, 7, 12, 13, 14
+```
