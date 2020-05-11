@@ -3,8 +3,8 @@
 
 1) To run the code
 
-nsml run -d fashion_eval -e main.py 
+    nsml run -d fashion_eval -e main.py 
 
 2) The path to our pre-trained model in NSML 
 
-See "requirements.txt" file in repository.
+    See "requirements.txt" file in repository.
