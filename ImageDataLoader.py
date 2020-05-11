@@ -19,7 +19,7 @@ class TransformTwice:
         out1 = self.transform(inp)
         out2 = self.transform(inp)
         return out1, out2    
- 
+#RandAugment for Labeled data 
 class TransformMore:
     def __init__(self, transform):
         self.transform = transform
@@ -29,7 +29,7 @@ class TransformMore:
         o = self.more_transform(inp)
         out = self.transform(o)
         return out
-
+#RandAugment for Unlabeled data
 class TransformFix:
     def __init__(self, transform):
         self.transform = transform

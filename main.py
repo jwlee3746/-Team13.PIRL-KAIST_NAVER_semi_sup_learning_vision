@@ -81,9 +81,8 @@ class SemiLoss(object):
     def __call__(self, outputs_x, targets_x, outputs_u, targets_u, epoch, final_epoch, mask):
         probs_u = torch.softmax(outputs_u, dim=1)
         Lx = -torch.mean(torch.sum(F.log_softmax(outputs_x, dim=1) * targets_x, dim=1))
-        #Lu = torch.mean((probs_u - targets_u)**2)
+        # Cross-entropy loss for unlabeled data
         Lu = -torch.mean(torch.sum(F.log_softmax(outputs_u, dim=1) * self._make_onehot(targets_u), dim=1) * mask)
-        # Lu = (F.cross_entropy(outputs_u, _make_onehot(targets_u), reduction='none') * mask).mean()
         return Lx, Lu, opts.lambda_u * linear_rampup(epoch, final_epoch)
 
     def _make_onehot(self, target_u):
@@ -392,6 +391,7 @@ def train(opts, train_loader, unlabel_loader, model, criterion, optimizer, epoch
             # compute guessed labels of unlabel samples
             embed_u1, pred_u1 = model(inputs_u_w)
             embed_u2, pred_u2 = model(inputs_u_s)
+            #Delete sharpening in baseline
             #pseudo_label = torch.softmax(pred_u1, dim=1)
             #pt = pseudo_label**(1/opts.T)
             #targets_u = pt / pt.sum(dim=1, keepdim=True)
@@ -399,7 +399,7 @@ def train(opts, train_loader, unlabel_loader, model, criterion, optimizer, epoch
             targets_u = torch.softmax(pred_u1, dim=1)
 
 
-        # mixup
+        # Reinforced mixup
         all_inputs = torch.cat([inputs_x, inputs_u_w, inputs_u_s], dim=0)
         all_targets = torch.cat([targets_x, targets_u, targets_u], dim=0)
 
@@ -428,10 +428,8 @@ def train(opts, train_loader, unlabel_loader, model, criterion, optimizer, epoch
         logits = interleave(logits, batch_size)
         logits_x = logits[0]
         logits_u = torch.cat(logits[1:], dim=0)
-
-        #embed_x, pred_x = model(inputs_x)
-
-        #pseudo_label = torch.softmax(targets_u, dim=1)
+        
+        #Pseudo_labeling
         max_probs, pred_u = torch.max(targets_u, dim=1)
         #print(pseudo_label)
         #print(max_probs)
@@ -440,7 +438,6 @@ def train(opts, train_loader, unlabel_loader, model, criterion, optimizer, epoch
         #print(mask)
         #print(mask.size())
 
-        #loss_x, loss_un, weigts_mixing = criterion(logits_x, mixed_target[:batch_size], logits_u, mixed_target[batch_size:], epoch+batch_idx/len(train_loader), opts.epochs)
         loss_x, loss_un, weigts_mixing = criterion(logits_x, mixed_target[:batch_size], pred_u2, pred_u, epoch+batch_idx/len(train_loader), opts.epochs, mask)
         loss = loss_x + weigts_mixing * loss_un
 
